@@ -1,0 +1,29 @@
+draw a fractal tree --- javascript
+
+function draw(x,y,length,angle, branchWidth) {
+  ctx.beginPath();
+  ctx.save();
+  ctx.lineWidth = branchWidth;
+  ctx.strokeStyle = "white";
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = 'white';
+  ctx.translate(x,y);
+  ctx.rotate(angle*Math.PI/180);
+  ctx.moveTo(0,0);
+  ctx.lineTo(0,-length);
+  ctx.stroke();
+
+  if (length < 8) {
+    // ctx.beginPath();
+    // ctx.fillRect(x,y,10,5);
+    ctx.restore(); 
+    return;
+  }
+
+  draw(0,-length,length*0.8,+20, branchWidth/0.9)
+  draw(0,-length,length*0.8,-20, branchWidth/0.9)
+
+  ctx.restore();
+}
+
+draw(canvas.width/2,canvas.height-100,120,0,1)
