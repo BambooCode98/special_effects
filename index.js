@@ -28,8 +28,8 @@ function createParticle(x,y) {
 // ball1.isMoving();
 // ball1.location();
 
-let [x,y] = [canvas.width/2,canvas.height/2];
-let gravity = 1;
+let [x,y] = [canvas.width/2,5];
+let gravity = 0.01;
 function animate() {
   let [x2,y2] = [Math.random()*window.innerWidth,Math.random()*innerHeight];
   // ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -41,15 +41,17 @@ function animate() {
   ctx.beginPath();
   gravity += 0.01;
   if(gravity >= 12) {
-    gravity = 1;
+    gravity = 0.01;
     y=10
   }
   y += gravity;
-  x += 0.5;
+  x += 1;
   if(x > canvas.width || y > Math.random()*canvas.height*10) {
     x = Math.random()*canvas.width;
     y = 10;
   }
+  ctx.translate(500,300)
+  ctx.rotate(2);
   ctx.arc(x, y, 10, 0, Math.PI * 2);
   // ctx.arc(x2, y2, 5, 0, Math.PI * 2);
   ctx.closePath();
