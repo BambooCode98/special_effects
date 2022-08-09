@@ -6,6 +6,8 @@ ctx = canvas.getContext('2d');
 window.addEventListener('load',() => {
   ctx.canvas.width = window.innerWidth;
   ctx.canvas.height = window.innerHeight;
+  ctx.shadowBlur = 15;
+  ctx.shadowColor = 'white';
   // animate()
   requestAnimationFrame(animate)
   
