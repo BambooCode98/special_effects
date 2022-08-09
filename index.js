@@ -51,7 +51,7 @@ function animate() {
     y = 10;
   }
   ctx.translate(500,300);
-  ctx.scale(0.9,0.9)
+  ctx.scale(0.9,1.1);
   ctx.rotate(2);
   ctx.arc(x, y, 10, 0, Math.PI * 2);
   // ctx.arc(x2, y2, 5, 0, Math.PI * 2);
