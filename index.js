@@ -7,7 +7,7 @@ window.addEventListener('load',() => {
   ctx.canvas.width = window.innerWidth;
   ctx.canvas.height = window.innerHeight;
   ctx.shadowBlur = 15;
-  ctx.shadowColor = 'white';
+  ctx.shadowColor = 'lightblue';
   // animate()
   requestAnimationFrame(animate)
   
@@ -38,7 +38,7 @@ function animate() {
   // ctx.save();
   ctx.fillStyle = 'rgba(0,0,255,0.02)';
   ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = 'red';
+  ctx.fillStyle = 'black';
   
   ctx.beginPath();
   gravity += 0.01;
