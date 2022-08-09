@@ -1,80 +1,63 @@
 canvas = document.querySelector('.canvas');
 ctx = canvas.getContext('2d');
-let rotation = 0;
-let [dx, dy, x, y] = [1,1,50,50];
-let sides = 0;
+// cyx.fillStyle = 'black';
+// ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
 
-window.addEventListener('load', () => {
+window.addEventListener('load',() => {
   ctx.canvas.width = window.innerWidth;
   ctx.canvas.height = window.innerHeight;
-  ctx.lineWidth = 15;
-  ctx.lineCap='round';
-  ctx.strokeStyle = 'yellow';
-  ctx.save();
-  // ctx.translate(canvas.width/2,canvas.height/2);
-  // ctx.scale(2,2);
-  
-  // ctx.rotate(0);
-  // draw(canvas.width/2,canvas.height-100,120,0,1)
-
-  // lineFractals()
+  // animate()
+  requestAnimationFrame(animate)
   
 })
 
-let rotateStuff = setInterval( () => {
-  sides++;
-  if(sides === 500) {
-    clearInterval(rotateStuff)
+function createParticle(x,y) {
+  return {
+    x: x,
+    y: y,
+    isMoving() {
+      console.log('ball is moving');
+    },
+    location() {
+      console.log(`x:${x},y:${y}`);
+    }
   }
-  console.log(sides);
-  draw(canvas.width/2,canvas.height-100,sides,0,1)
-  
-},1000)
-
-
-function lineFractals() {
-  ctx.beginPath();
-  ctx.moveTo(0,0);
-  // if(x + dx < 0 || x + dx > canvas.width) {
-  //   dx = -dx;
-  // }
-  // if(y + dy < 0 || y + dy > canvas.height) {
-  //   dy = -dy
-  // }
-  // x += dx;
-  // y += dy;
-  ctx.lineTo(10,10);
-  ctx.stroke();
-
-  ctx.rotate((Math.PI*4)/sides);
-  ctx.scale(0.99,0.99);
-  ctx.translate(25,25)
-  // lineFractals()
 }
 
+// let ball1 = createParticle(4,3);
+// ball1.isMoving();
+// ball1.location();
 
-function draw(x,y,length,angle, branchWidth) {
+let [x,y] = [canvas.width/2,canvas.height/2];
+let gravity = 1;
+function animate() {
+  let [x2,y2] = [Math.random()*window.innerWidth,Math.random()*innerHeight];
+  // ctx.clearRect(0,0,canvas.width,canvas.height);
+  // ctx.save();
+  ctx.fillStyle = 'rgba(0,0,255,0.02)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = 'red';
+  
   ctx.beginPath();
-  ctx.save();
-  ctx.lineWidth = branchWidth;
-  ctx.strokeStyle = "black";
-  ctx.shadowBlur = 15;
-  ctx.shadowColor = 'white';
-  ctx.translate(x,y);
-  ctx.rotate(angle*Math.PI/180);
-  ctx.moveTo(0,0);
-  ctx.lineTo(0,-length);
-  ctx.stroke();
-
-  if (length < 8) {
-    // ctx.beginPath();
-    // ctx.fillRect(x,y,10,5);
-    ctx.restore(); 
-    return;
+  gravity += 0.01;
+  if(gravity >= 12) {
+    gravity = 1;
+    y=10
   }
-
-  draw(0,-length,length*0.8,+20, branchWidth/0.9)
-  draw(0,-length,length*0.8,-20, branchWidth/0.9)
-
-  ctx.restore();
+  y += gravity;
+  x += 0.5;
+  if(x > canvas.width || y > Math.random()*canvas.height*10) {
+    x = Math.random()*canvas.width;
+    y = 10;
+  }
+  ctx.arc(x, y, 10, 0, Math.PI * 2);
+  // ctx.arc(x2, y2, 5, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.fill();
+  // if(y >= canvas.height) {
+  //   y = 100;
+  // }
+  // ctx.restore();
+  requestAnimationFrame(animate)
+  
 }
