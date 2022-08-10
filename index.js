@@ -1,68 +1,70 @@
 canvas = document.querySelector('.canvas');
 ctx = canvas.getContext('2d');
-// cyx.fillStyle = 'black';
-// ctx.fillRect(0,0,window.innerWidth,window.innerHeight);
+let particleArray = [];
 
 window.addEventListener('load',() => {
   ctx.canvas.width = window.innerWidth;
   ctx.canvas.height = window.innerHeight;
   ctx.shadowBlur = 15;
   ctx.shadowColor = 'lightblue';
-  // animate()
-  requestAnimationFrame(animate)
+  animate()
   
 })
 
 function createParticle(x,y) {
+  let gravity = 0.01;
+  let wind = 1;
   return {
     x: x,
     y: y,
-    isMoving() {
-      console.log('ball is moving');
+    gravity,
+    wind,
+    update() {
+      gravity += 0.01;
+      y += gravity;
+      x += wind;
+      if(gravity >= 20) {
+        gravity = 0.01;
+        y=10;
+      }
+      if(x > canvas.width || y > Math.random()*canvas.height*10) {
+        x = Math.random()*canvas.width;
+        y = 10;
+      }
     },
-    location() {
-      console.log(`x:${x},y:${y}`);
-    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(x, y, 10, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.fill();
+    },
   }
 }
 
-// let ball1 = createParticle(4,3);
-// ball1.isMoving();
-// ball1.location();
+function particles() {
+  for(let i=0; i<50; i++) {
+    particleArray.push(createParticle(Math.random()*canvas.width,Math.random()*canvas.height))
+  }
 
-let [x,y] = [canvas.width/2,5];
-let gravity = 0.01;
+}
+// let part1 = createParticle(canvas.width/2,canvas.height/2);
+// let part2 = createParticle(canvas.width/3,canvas.height/3);
+particles();
+console.log(particleArray);
+
 function animate() {
-  let [x2,y2] = [Math.random()*window.innerWidth,Math.random()*innerHeight];
-  // ctx.clearRect(0,0,canvas.width,canvas.height);
-  // ctx.save();
+  // let [x2,y2] = [Math.random()*window.innerWidth,Math.random()*innerHeight];
   ctx.fillStyle = 'rgba(0,0,255,0.02)';
   ctx.fillRect(0,0,canvas.width,canvas.height);
   ctx.fillStyle = 'black';
   
-  ctx.beginPath();
-  gravity += 0.01;
-  if(gravity >= 12) {
-    gravity = 0.01;
-    y=10
-  }
-  y += gravity;
-  x += 1;
-  if(x > canvas.width || y > Math.random()*canvas.height*10) {
-    x = Math.random()*canvas.width;
-    y = 10;
-  }
-  ctx.translate(500,300);
-  ctx.scale(0.9,1.1);
-  ctx.rotate(2);
-  ctx.arc(x, y, 10, 0, Math.PI * 2);
-  // ctx.arc(x2, y2, 5, 0, Math.PI * 2);
-  ctx.closePath();
-  ctx.fill();
-  // if(y >= canvas.height) {
-  //   y = 100;
-  // }
-  // ctx.restore();
+  
+  particleArray.forEach(particle => {
+    particle.update();
+    particle.draw();
+  })
+  // ctx.rotate(2);
+  // ctx.translate(100,100)
   requestAnimationFrame(animate)
   
 }
