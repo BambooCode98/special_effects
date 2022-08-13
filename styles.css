@@ -1,4 +1,4 @@
-html,
+/* html,
 body {
   margin: 0;
   padding: 0;
@@ -6,11 +6,23 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+} */
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  background: white;
 }
 
 canvas{
   /* width: 450;
   height: 500; */
   /* border: 1px black solid; */
-  background-color: black;
+  /* background-color: black; */
+  display: block;
+  /* filter: blur(15px) contrast(20); */
 }

@@ -5,36 +5,36 @@ let particleArray = [];
 window.addEventListener('load',() => {
   ctx.canvas.width = window.innerWidth;
   ctx.canvas.height = window.innerHeight;
-  ctx.shadowBlur = 15;
-  ctx.shadowColor = 'lightblue';
+  // ctx.shadowBlur = 15;
+  // ctx.shadowColor = 'lightblue';
   animate()
   
 })
 
-function createParticle(x,y) {
-  let gravity = 0.01;
-  let wind = 1;
+function createParticle(x,y,size,grav,winds) {
+  let gravity = grav;
+  let wind = winds;
   return {
     x: x,
     y: y,
     gravity,
     wind,
+    size,
     update() {
-      gravity += 0.01;
+      // gravity = grav;
       y += gravity;
       x += wind;
-      if(gravity >= 20) {
-        gravity = 0.01;
-        y=10;
-      }
-      if(x > canvas.width || y > Math.random()*canvas.height*10) {
+      // if(x + this.size >= size && y + this.size >= size&& x + this.size <= size && y + this.size <= size) {
+      //   -y;
+      // }
+      if(x >= canvas.width || y >= canvas.height) {
         x = Math.random()*canvas.width;
         y = 10;
       }
     },
     draw() {
       ctx.beginPath();
-      ctx.arc(x, y, 10, 0, Math.PI * 2);
+      ctx.arc(x, y, size, 0, Math.PI * 2);
       ctx.closePath();
       ctx.fill();
     },
@@ -43,7 +43,7 @@ function createParticle(x,y) {
 
 function particles() {
   for(let i=0; i<50; i++) {
-    particleArray.push(createParticle(Math.random()*canvas.width,Math.random()*canvas.height))
+    particleArray.push(createParticle(Math.random()*canvas.width*10,Math.random()*canvas.height*10,Math.random()*10,Math.random()*10,Math.sin((Math.random()*2)-1)))
   }
 
 }
@@ -54,9 +54,10 @@ console.log(particleArray);
 
 function animate() {
   // let [x2,y2] = [Math.random()*window.innerWidth,Math.random()*innerHeight];
-  ctx.fillStyle = 'rgba(0,0,255,0.02)';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = 'black';
+  // ctx.fillStyle = 'rgba(255,255,255,0.02)'; //leaves trails behind
+  // ctx.fillStyle = 'white';
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = 'red';
   
   
   particleArray.forEach(particle => {
