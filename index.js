@@ -1,6 +1,9 @@
 canvas = document.querySelector('.canvas');
 ctx = canvas.getContext('2d');
 let particleArray = [];
+let boxX = 200;
+let boxY = 200;
+let [boxW,boxH] = [200,200]
 
 window.addEventListener('load',() => {
   ctx.canvas.width = window.innerWidth;
@@ -11,9 +14,9 @@ window.addEventListener('load',() => {
   
 })
 
-function createParticle(x,y,size,grav,winds) {
-  let gravity = grav;
-  let wind = winds;
+function createParticle(x,y,size,g,w,nx) {
+  let gravity = g;
+  let wind = w;
   return {
     x: x,
     y: y,
@@ -21,16 +24,30 @@ function createParticle(x,y,size,grav,winds) {
     wind,
     size,
     update() {
-      // gravity = grav;
       y += gravity;
       x += wind;
-      // if(x + this.size >= size && y + this.size >= size&& x + this.size <= size && y + this.size <= size) {
-      //   -y;
+      // gravity = grav;
+      // if(x < boxX + boxW &&
+      //    x + size > boxX &&
+      //    y < boxY + boxH &&
+      //    y + size > boxY       
+      // ) {
+      //   y -= gravity;
       // }
-      if(x >= canvas.width || y >= canvas.height) {
+        // console.log(y);
+      // if(y > 200) {
+      //   this.y -= 4;
+        
+      // }
+      if(x > canvas.width || y > canvas.height || x < 0 || y < 0) {
         x = Math.random()*canvas.width;
         y = 10;
       }
+      // if(x + size >= canvas.width || x + size <= 0) {
+      //   // x -= nx;
+      //   // console.log(x);
+      //   // y = 10;
+      // }
     },
     draw() {
       ctx.beginPath();
@@ -43,7 +60,7 @@ function createParticle(x,y,size,grav,winds) {
 
 function particles() {
   for(let i=0; i<50; i++) {
-    particleArray.push(createParticle(Math.random()*canvas.width*10,Math.random()*canvas.height*10,Math.random()*10,Math.random()*10,Math.sin((Math.random()*2)-1)))
+    particleArray.push(createParticle(Math.random()*canvas.width*10,Math.random()*canvas.height*10,Math.random()*10,Math.random()*10,Math.sin((Math.random()*2)-1),5))
   }
 
 }
@@ -58,7 +75,7 @@ function animate() {
   // ctx.fillStyle = 'white';
   ctx.clearRect(0,0,canvas.width,canvas.height);
   ctx.fillStyle = 'red';
-  
+  // ctx.fillRect(boxX,boxY,boxW,boxH)
   
   particleArray.forEach(particle => {
     particle.update();
