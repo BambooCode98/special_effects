@@ -29,19 +29,17 @@ function Particle(x,y,size,g,w,color) {
   this.update = function() {
     this.y += this.gravity;
     this.x += this.wind;
-    this.radians += 1;
+    this.radians += 0.8;
     this.x = this.x + Math.sin(this.radians);
     this.y = this.y + Math.cos(this.radians);
 
-    if(this.x > this.radius + canvas.width || this.x < this.radius + 0) 
+    if(this.x + this.size > canvas.width || this.x + this.size < 1 + this.size || this.y + this.size > canvas.height || this.y + this.size < 0) 
       {
+      this.boom()
       this.x = Math.random()*canvas.width;
       this.y = 10;
     }
 
-    if(this.y > canvas.height) {
-      this.y = 10;
-    }
   };
 
   this.draw = function() {
@@ -52,12 +50,20 @@ function Particle(x,y,size,g,w,color) {
     ctx.closePath();
     ctx.fill();
   };
+
+  this.boom = function() {
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}, ${Math.random()})`
+    ctx.arc(this.x, this.y, 25, 0, Math.PI * 2)
+    ctx.closePath();
+    ctx.fill();
+  }
 }
 
 function particles() {
   for(let i=0; i<75; i++) {
     let x = Math.cos(0);
-    let y = Math.sin(0)
+    let y = Math.sin(0);
     particleArray.push(new Particle(Math.random()*innerWidth,Math.random()*innerHeight,Math.random()*15,Math.random()*2,Math.sin((Math.random()*2)-1),'black'))
   }
 
@@ -65,7 +71,6 @@ function particles() {
 
 
 particles();
-console.log(particleArray);
 
 function animate() {
   // let [x2,y2] = [Math.random()*window.innerWidth,Math.random()*innerHeight];  //particle flash effect
