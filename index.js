@@ -1,5 +1,7 @@
-canvas = document.querySelector('.canvas');
-ctx = canvas.getContext('2d');
+'use strict';
+
+let canvas = document.querySelector('.canvas');
+let ctx = canvas.getContext('2d');
 let particleArray = [];
 let boxX = 200;
 let boxY = 200;
@@ -14,75 +16,69 @@ window.addEventListener('load',() => {
   
 })
 
-function createParticle(x,y,size,g,w,nx) {
-  let gravity = g;
-  let wind = w;
-  return {
-    x: x,
-    y: y,
-    gravity,
-    wind,
-    size,
-    update() {
-      y += gravity;
-      x += wind;
-      // gravity = grav;
-      // if(x < boxX + boxW &&
-      //    x + size > boxX &&
-      //    y < boxY + boxH &&
-      //    y + size > boxY       
-      // ) {
-      //   y -= gravity;
-      // }
-        // console.log(y);
-      // if(y > 200) {
-      //   this.y -= 4;
-        
-      // }
-      if(x > canvas.width || y > canvas.height || x < 0 || y < 0) {
-        x = Math.random()*canvas.width;
-        y = 10;
-      }
-      // if(x + size >= canvas.width || x + size <= 0) {
-      //   // x -= nx;
-      //   // console.log(x);
-      //   // y = 10;
-      // }
-    },
-    draw() {
-      ctx.beginPath();
-      ctx.arc(x, y, size, 0, Math.PI * 2);
-      ctx.closePath();
-      ctx.fill();
-    },
-  }
+function Particle(x,y,size,g,w,color) {
+  this.x = x;
+  this.y = y;
+  this.gravity = g;
+  this.wind = w;
+  this.size = size;
+  this.color = color;
+  this.radians = 0;
+
+
+  this.update = function() {
+    this.y += this.gravity;
+    this.x += this.wind;
+    this.radians += 0.04;
+    this.x = this.x + Math.sin(this.radians);
+    this.y = this.y + Math.cos(this.radians);
+
+    if(this.x > this.radius + canvas.width || this.x < this.radius + 0) 
+      {
+      this.x = Math.random()*canvas.width;
+    }
+
+    if(this.y > canvas.height) {
+      this.y =10;
+    }
+  };
+
+  this.draw = function() {
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    // ctx.fillRect(0,0,innerWidth,innerHeight)
+    ctx.closePath();
+    ctx.fill();
+  };
 }
 
 function particles() {
-  for(let i=0; i<50; i++) {
-    particleArray.push(createParticle(Math.random()*canvas.width*10,Math.random()*canvas.height*10,Math.random()*10,Math.random()*10,Math.sin((Math.random()*2)-1),5))
+  for(let i=0; i<75; i++) {
+    let x = Math.cos(0);
+    let y = Math.sin(0)
+    particleArray.push(new Particle(Math.random()*innerWidth,Math.random()*innerHeight,Math.random()*15,Math.random()*2,Math.sin((Math.random()*2)-1),'black'))
   }
 
 }
-// let part1 = createParticle(canvas.width/2,canvas.height/2);
-// let part2 = createParticle(canvas.width/3,canvas.height/3);
+
+
 particles();
 console.log(particleArray);
 
 function animate() {
-  // let [x2,y2] = [Math.random()*window.innerWidth,Math.random()*innerHeight];
+  // let [x2,y2] = [Math.random()*window.innerWidth,Math.random()*innerHeight];  //particle flash effect
   // ctx.fillStyle = 'rgba(255,255,255,0.02)'; //leaves trails behind
-  // ctx.fillStyle = 'white';
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.fillStyle = 'red';
-  // ctx.fillRect(boxX,boxY,boxW,boxH)
+  // ctx.fillStyle = 'red';
+  
+  ctx.fillStyle = 'rgba(255,255,255,0.09)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
   
   particleArray.forEach(particle => {
     particle.update();
     particle.draw();
   })
-  // ctx.rotate(2);
-  // ctx.translate(100,100)
+  
   requestAnimationFrame(animate)
   
 }

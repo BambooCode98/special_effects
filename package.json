@@ -1,0 +1,22 @@
+{
+  "name": "special_effects",
+  "version": "1.0.0",
+  "description": "Special Effects",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BambooCode98/special_effects.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BambooCode98/special_effects/issues"
+  },
+  "homepage": "https://github.com/BambooCode98/special_effects#readme",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
