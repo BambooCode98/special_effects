@@ -29,17 +29,18 @@ function Particle(x,y,size,g,w,color) {
   this.update = function() {
     this.y += this.gravity;
     this.x += this.wind;
-    this.radians += 0.04;
+    this.radians += 1;
     this.x = this.x + Math.sin(this.radians);
     this.y = this.y + Math.cos(this.radians);
 
     if(this.x > this.radius + canvas.width || this.x < this.radius + 0) 
       {
       this.x = Math.random()*canvas.width;
+      this.y = 10;
     }
 
     if(this.y > canvas.height) {
-      this.y =10;
+      this.y = 10;
     }
   };
 
