@@ -2,4 +2,9 @@ function sum(a,b) {
   return a + b
 }
 
-module.exports = sum
+function isPalindrome(word) {
+  word.toArray();
+  typeof word === Array ? 'is array': 'not array';
+}
+
+module.exports = isPalindrome

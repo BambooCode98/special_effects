@@ -24,5 +24,6 @@ canvas{
   /* border: 1px black solid; */
   /* background-color: black; */
   display: block;
+  touch-action: none;
   /* filter: blur(5px) contrast(20); */
 }

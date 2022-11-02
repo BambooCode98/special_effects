@@ -35,9 +35,10 @@ function Particle(x,y,size,g,w,color) {
 
     if(this.x + this.size > canvas.width || this.x + this.size < 1 + this.size || this.y + this.size > canvas.height || this.y + this.size < 0) 
       {
-      this.boom()
-      this.x = Math.random()*canvas.width;
-      this.y = 10;
+      this.boom(this.x,this.y,1)
+      // this.x = Math.random()*canvas.width;
+      // this.y = 10;
+      // particleArray.shift();
     }
 
   };
@@ -51,21 +52,37 @@ function Particle(x,y,size,g,w,color) {
     ctx.fill();
   };
 
-  this.boom = function() {
+  this.boom = function(startx,starty,size) {
     ctx.beginPath();
-    ctx.fillStyle = `rgba(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}, ${Math.random()})`
-    ctx.arc(this.x, this.y, 25, 0, Math.PI * 2)
+    ctx.save();
+    ctx.fillStyle = `rgba(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255}, ${Math.random()})`;
+    // console.log(size);
+    // ctx.rotate(angle*Math.PI/180)
+    ctx.arc(startx, starty, size, 0, Math.PI * 2)
     ctx.closePath();
     ctx.fill();
+
+    if(size > 25){
+      ctx.restore();
+      return;
+    }
+    ctx.restore();
+    this.boom(startx, starty, size*1.5);
+    // this.boom(startx+2,starty+2,size*2)
   }
 }
 
 function particles() {
-  for(let i=0; i<75; i++) {
-    let x = Math.cos(0);
-    let y = Math.sin(0);
-    particleArray.push(new Particle(Math.random()*innerWidth,Math.random()*innerHeight,Math.random()*15,Math.random()*2,Math.sin((Math.random()*2)-1),'black'))
-  }
+  // for(let i=0; i<75; i++) {
+  //   let x = Math.cos(0);
+  //   let y = Math.sin(0);
+  //   particleArray.push(new Particle(Math.random()*innerWidth,Math.random()*innerHeight,Math.random()*15,Math.random()*2,Math.sin((Math.random()*2)-1),'black'))
+  // }
+
+  //touch method
+  canvas.addEventListener('touchmove',(e) => {
+    particleArray.push(new Particle(e.touches[0].clientX,e.touches[0].clientY,Math.random()*15,Math.random()*2,Math.sin((Math.random()*2)-1),'black'))
+  })
 
 }
 
