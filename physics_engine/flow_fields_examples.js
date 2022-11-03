@@ -51,6 +51,8 @@ canvas.addEventListener('mousemove', (e) => {
   })
 })
 
+console.log(points);
+
 // random attractor params
 let a = Math.random() * 4 - 2;
 let b = Math.random() * 4 - 2;
