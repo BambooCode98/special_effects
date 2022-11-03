@@ -1,16 +1,28 @@
 // example 1
 
-var canvas = document.querySelector(".canvas"),
+let canvas = document.querySelector(".canvas"),
     ctx = canvas.getContext("2d"),
     width = canvas.width = window.innerWidth,
-    height = canvas.height = window.innerHeight;
+    height = canvas.height = window.innerHeight,
+    opacity = document.querySelector(".opacity"),
+    totals = document.querySelector('.totals'),
+    disappear = document.querySelector('.dissipate'),
+    dValue = disappear.value;
+
+
+// console.log(totals);
 
 ctx.lineWidth = 0.5;
 let points = [];
-setInterval(() => {
-  points.pop()
-}, 100)
+console.log(dValue);
 
+//the setTimeouts functions allow fo rhte dissipation of the particles to appear seamless, does not work with setInterval
+let dis = function () {
+  dValue = disappear.value;
+  points.shift();
+  setTimeout(dis, dValue)
+}
+setTimeout(dis, dValue)
 
 canvas.addEventListener('touchstart', (e) => {
   points.push({
@@ -40,24 +52,25 @@ canvas.addEventListener('mousemove', (e) => {
 })
 
 // random attractor params
-var a = Math.random() * 4 - 2;
-var b = Math.random() * 4 - 2;
-var c = Math.random() * 4 - 2;
-var d = Math.random() * 4 - 2;
+let a = Math.random() * 4 - 2;
+let b = Math.random() * 4 - 2;
+let c = Math.random() * 4 - 2;
+let d = Math.random() * 4 - 2;
 
 render();
 
 function render() {
-  ctx.fillStyle = 'rgba(255,255,255,0.9)';
+
+  ctx.fillStyle = `rgba(255,255,255,${opacity.value})`;
   ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.font = "25px serif";
-  ctx.fillStyle = 'black';
-  ctx.fillText(`Current Particles: ${points.length}`, canvas.width/64, canvas.height/35)
+  totals.textContent = `Current Particles: ${points.length}`;
+  
   
   for(var i = 0; i < points.length; i++) {
     // get each point and do what we did before with a single point
     var p = points[i];
     var value = getValue(p.x, p.y);
+    // console.log(value);
     p.vx += Math.cos(value) * 0.3;
     p.vy += Math.sin(value) * 0.3;
     
@@ -91,7 +104,7 @@ function getValue(x, y) {
   // http://paulbourke.net/fractals/clifford/
   
   // scale down x and y
-  var scale = 0.01;
+  let scale = 0.01;
   x = (x - width / 2) * scale;
   y = (y - height / 2)  * scale;
 
