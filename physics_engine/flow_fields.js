@@ -2,7 +2,9 @@
 let canvas = document.querySelector(".canvas"),
   ctx = canvas.getContext("2d"),
   width = canvas.width = window.innerWidth,
-  height = canvas.height = window.innerHeight;
+  height = canvas.height = window.innerHeight,
+  previousPageX = null,
+  previousPageY= null;
 
 
 
@@ -12,13 +14,63 @@ let xt = 0;
 let yt = 0;
 
 canvas.addEventListener('mousemove', (e) => {
-  xt = e.movementX;
-  yt = e.movementY;
+  // xt = e.movementX;
+  // yt = e.movementY;
+  if(e.movementX < 0 && e.movementY < 0) {
+    xt += -1;
+    yt += -1;
+  } else if(e.movementX === 0 && e.movementY > 0 ) {
+    yt += 1;
+  }  else if(e.movementX > 0 && e.movementY === 0 ) {
+    xt += 1;
+  } else if(e.movementX > 0 && e.movementY > 0 ) {
+    xt += 1;
+    yt += 1;
+  } else if(e.movementX === 0 && e.movementY < 0 ) {
+    yt += -1;
+  } else if(e.movementX < 0 && e.movementY === 0 ) {
+    xt += -1;
+  } else if(e.movementX > 0 && e.movementY < 0 ) {
+    xt += 1
+    yt += -1;
+  } else if(e.movementX < 0 && e.movementY > 0 ) {
+    xt += -1;
+    yt += 1;
+  }
+  // console.log(e.movementX,e.movementY)
 })
 canvas.addEventListener('touchmove', (e) => {
-  xt = e.touches[0].clientX/10*Math.sin(1);
-  yt = e.touches[0].clientY/10*Math.sin(1);
-  console.log(e.touches[0]);
+  e.movementX = (e.touches[0].pageX - previousPageX)*0.1;
+  e.movementY = (e.touches[0].pageY - previousPageY)*0.1;
+  console.log(e.movementX,e.movementY);
+  if(e.movementX < 0 && e.movementY < 0) {
+    xt += -0.1;
+    yt += -0.1;
+  } else if(e.movementX === 0 && e.movementY > 0 ) {
+    yt += 0.1;
+  }  else if(e.movementX > 0 && e.movementY === 0 ) {
+    xt += 0.1;
+  } else if(e.movementX > 0 && e.movementY > 0 ) {
+    xt += 0.1;
+    yt += 0.1;
+  } else if(e.movementX === 0 && e.movementY < 0 ) {
+    yt += -0.1;
+  } else if(e.movementX < 0 && e.movementY === 0 ) {
+    xt += -0.1;
+  } else if(e.movementX > 0 && e.movementY < 0 ) {
+    xt += 0.1;
+    yt += -0.1;
+  } else if(e.movementX < 0 && e.movementY > 0 ) {
+    xt += -0.1;
+    yt += 0.1;
+  }
+  // console.log(e);
+})
+
+canvas.addEventListener('touchend', (e) => {
+  previousPageX = e.changedTouches[0].pageX;
+  previousPageY = e.changedTouches[0].pageY;
+  // console.log(previousPageX,previousPageY,'end');
 })
 
 
