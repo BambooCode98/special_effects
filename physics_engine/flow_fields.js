@@ -1,140 +1,48 @@
-
+'use strict';
 let canvas = document.querySelector(".canvas"),
-  ctx = canvas.getContext("2d"),
-  width = canvas.width = window.innerWidth,
-  height = canvas.height = window.innerHeight,
-  previousPageX = null,
-  previousPageY= null;
-
-
-
+    ctx = canvas.getContext("2d"),
+    width = ctx.canvas.width = window.innerWidth,
+    height = ctx.canvas.height = window.innerHeight,
+    left_x = width * -0.5,
+    right_x = width * 0.5,
+    top_y = height * -0.5,
+    bottom_y = height * 0.5,
+    scale = width*0.09,
+    angleX = 0,
+    angleY = 0,
+    mousePush,
+    mx = 0,
+    my = 0;
 let grid = [];
-ctx.lineWidth = 1;
-let xt = 0;
-let yt = 0;
+let total_cols = (right_x - left_x);
+let total_rows = (bottom_y - top_y);
+let default_angle = Math.PI;
 
-canvas.addEventListener('mousemove', (e) => {
-  // xt = e.movementX;
-  // yt = e.movementY;
-  if(e.movementX < 0 && e.movementY < 0) {
-    xt += -1;
-    yt += -1;
-  } else if(e.movementX === 0 && e.movementY > 0 ) {
-    yt += 1;
-  }  else if(e.movementX > 0 && e.movementY === 0 ) {
-    xt += 1;
-  } else if(e.movementX > 0 && e.movementY > 0 ) {
-    xt += 1;
-    yt += 1;
-  } else if(e.movementX === 0 && e.movementY < 0 ) {
-    yt += -1;
-  } else if(e.movementX < 0 && e.movementY === 0 ) {
-    xt += -1;
-  } else if(e.movementX > 0 && e.movementY < 0 ) {
-    xt += 1
-    yt += -1;
-  } else if(e.movementX < 0 && e.movementY > 0 ) {
-    xt += -1;
-    yt += 1;
-  }
-  // console.log(e.movementX,e.movementY)
+console.log(scale);
+canvas.addEventListener('click', e => {
+  mousePush = new Vector(e.clientX, e.clientY)
+  mx = mousePush.magnitude()/100;
+  my = mousePush.magnitude()/100;
+  angleX += mx;
 })
-canvas.addEventListener('touchmove', (e) => {
-  e.movementX = (e.touches[0].pageX - previousPageX)*0.1;
-  e.movementY = (e.touches[0].pageY - previousPageY)*0.1;
-  console.log(e.movementX,e.movementY);
-  if(e.movementX < 0 && e.movementY < 0) {
-    xt += -0.1;
-    yt += -0.1;
-  } else if(e.movementX === 0 && e.movementY > 0 ) {
-    yt += 0.1;
-  }  else if(e.movementX > 0 && e.movementY === 0 ) {
-    xt += 0.1;
-  } else if(e.movementX > 0 && e.movementY > 0 ) {
-    xt += 0.1;
-    yt += 0.1;
-  } else if(e.movementX === 0 && e.movementY < 0 ) {
-    yt += -0.1;
-  } else if(e.movementX < 0 && e.movementY === 0 ) {
-    xt += -0.1;
-  } else if(e.movementX > 0 && e.movementY < 0 ) {
-    xt += 0.1;
-    yt += -0.1;
-  } else if(e.movementX < 0 && e.movementY > 0 ) {
-    xt += -0.1;
-    yt += 0.1;
-  }
-  // console.log(e);
+canvas.addEventListener('touchmove', e => {
+  mousePush = new Vector(e.touches[0].clientX, e.touches[0].clientY)
+  mx = mousePush.magnitude()/100;
+  my = mousePush.magnitude()/100;
+  // console.log();
 })
-
-canvas.addEventListener('touchend', (e) => {
-  previousPageX = e.changedTouches[0].pageX;
-  previousPageY = e.changedTouches[0].pageY;
-  // console.log(previousPageX,previousPageY,'end');
-})
-
-
-class GridPoints{
-  vel;
-  constructor(x,y) {
-    this.x = x;
-    this.y = y;
-    //in this case the velocity is the push, or wind/water forces.
-
-  }
-
-  getInitVelocity(vx,vy) {
-    this.vel = new Vector(vx,vy);
-    return this.vel;
-  }
-
-  updateVel(nx,ny) {
-    // console.log(this.vel.x+1)
-    //this function updates the velocity vector only
-    this.vel.x = nx;
-    this.vel.y = ny;
-  }
-
-  showMag() {
-    console.log(this.vel.magnitude());
-  }
-
-  showDir() {
-    console.log(this.vel.direction());
-  }
-
-  drawLength() {
-    let finalx,finaly;
-    ctx.beginPath();
-    ctx.moveTo(this.x,this.y);
-    // console.log(this.x,this.y,"init",this.vel.x);
-    finalx = this.x+(this.vel.magnitude()*this.vel.direction().dirx);
-    finaly = this.y+(this.vel.magnitude()*this.vel.direction().diry);
-    // console.log(finalx,finaly);
-    ctx.lineTo(finalx, finaly);
-    ctx.stroke();
-
-    if(this.vel.magnitude) {
-      ctx.fillRect(finalx, finaly,5,5)
-      ctx.fillStyle = 'red';
-    }
-  }
-
-
-}
+// console.log(mx);
 
 class Vector{
   constructor(x,y) {
     this.x = x;
     this.y = y;
   }
-  //calling a class in itself?
   add(v) {
     return new Vector(this.x+v.x, this.y+v.y);
   }
 
   magnitude() {
-    // console.log(this.x);
     return Math.sqrt(this.x**2 + this.y**2);
   }
 
@@ -146,44 +54,55 @@ class Vector{
     let dir = Math.sqrt(this.x**2 + this.y**2);
     dirx = this.x/dir;
     diry = this.y/dir;
-    // return Math.atan(this.y/this.x);
     return {dirx,diry}
   }
 
+  angle() {
+    return Math.sin(0)
+  }
+
 }
 
-// console.log(Math.random()*10);
 
-function CreateGrid() {
-  for( let i=0; i < canvas.width; i += 50) {
-    for(let j=0; j < canvas.height; j += 50) {
-    grid.push(new GridPoints(i,j))
-    }
+for(let i=0; i < width; i+=scale) {
+  for(let j=0; j < height; j+=scale) {
+    grid.push(new Vector(i,j))
+    // angle = -2 * Math.PI ;
+    
   }
 }
-CreateGrid();
-
-
-
 
 function animate() {
-  ctx.fillStyle = 'rgba(255,255,255,0.9)';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  // t+=0.1;
-  // console.log(t);
+  ctx.clearRect(0,0,canvas.width,canvas.height)
+  
   grid.forEach(point => {
-    // console.log(point.x,point.y);
-    ctx.fillRect(point.x,point.y,1,1);
-    point.getInitVelocity(1,1);
-    point.updateVel(xt,yt);
-    // point.showMag();
-    // point.showDir();
-    point.drawLength();
-  
+    // let pointX = point[0]+angle;
+    // let pointY = point[1]+angle;
+    // console.log();
+    let pMag = point.magnitude()/100;
+    angleX += mx;
+    angleY += my;
+    // let [px1,py1] = [point.x,point.y];
+    let px1 = point.x;
+    let py1 = point.y;
+    // console.log(angleX);
+    let pX = point.x + pMag * Math.cos(angleX) + mx;
+    let pY = point.y + pMag * Math.sin(angleY) + my;
+    // console.log(px1,pX);
+    ctx.beginPath();
+    ctx.moveTo(px1,py1);
+    ctx.lineTo(pX,pY);
+    ctx.stroke();
+    
+    // ctx.fillRect(pX,pY,5,5)
+    ctx.beginPath()
+    ctx.arc(pX,pY,2,0,Math.PI*2)
+    ctx.fillStyle = 'red'
+    ctx.fill();
   })
-  
+
+  // console.log(angleX,angleY);
   requestAnimationFrame(animate)
-  
 }
 
-animate();
+animate()
