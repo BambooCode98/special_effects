@@ -123,7 +123,8 @@ function noiset(a,b) {
   // console.log(range);
   for(let x=0; x<1000;x++) {
     for(let y=0; y<1000;y++) {
-      let range = (Math.sin(y)*Math.cos(x));
+      let range = (Math.sin(y*x));
+      // let range = (Math.sin(y)*Math.cos(x));
       range+=1;
       range/=2;
       let c = Math.round(range*255);
