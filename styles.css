@@ -44,7 +44,7 @@ canvas{
   left: 1%; */
   margin: 5px;
   z-index: 25;
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   height: 30px;
   width: 100px;
 }

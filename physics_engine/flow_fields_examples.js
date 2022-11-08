@@ -16,7 +16,7 @@ ctx.lineWidth = 0.5;
 let points = [];
 console.log(dValue);
 
-//the setTimeouts functions allow fo rhte dissipation of the particles to appear seamless, does not work with setInterval
+//the setTimeouts functions allow for the dissipation of the particles to appear seamless, does not work with setInterval
 let dis = function () {
   dValue = disappear.value;
   points.shift();

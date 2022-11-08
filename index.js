@@ -30,6 +30,7 @@ function Particle(x,y,size,g,w,color) {
     this.y += this.gravity;
     this.x += this.wind;
     this.radians += 0.8;
+    //can be this.x+=Math.etc
     this.x = this.x + Math.sin(this.radians);
     this.y = this.y + Math.cos(this.radians);
 
