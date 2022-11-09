@@ -90,9 +90,14 @@ class Vector{
     return {dirx,diry}
   }
 
+  dot() {
+
+  }
 
 }
 
+let part = new Particle(width/2,height/2,7)
+let part2 = new Particle(width/2.5,height/3,7)
 
 for(let i=0; i < width; i+=scale) {
   for(let j=0; j < height; j+=scale) {
@@ -102,28 +107,18 @@ for(let i=0; i < width; i+=scale) {
 
 
 
-function genNoise(t) {
-  //generates a value between 0-1 per unit of "time"
-  let noiseArray = [];
-  let rndnum;
-  for(let n=0; n<1; n+=0.001) {
-    // noiseArray.push(n%t*2);
-    // noiseArray.push({x: Math.cos(t+n), y: Math.sin(t*n)});
-    //if x or y here have cos/sin with t+n as a function then it makse the graph of sin/cos
-    noiseArray.push({x: t+n, y: t+n});
-  }
-  rndnum = noiseArray[Math.floor(Math.random()*noiseArray.length)];
-  // console.log(noiseArray);
-  return rndnum;
-}
+
+
 let colorgrid = [];
 function noiset(a,b) {
-  // console.log(Math.atan2(Math.sin(1),Math.cos(1)));
-  // console.log(range+=1.0);
-  // console.log(range);
-  for(let x=0; x<1000;x++) {
-    for(let y=0; y<1000;y++) {
-      let range = (Math.sin(y*x));
+  for(let x=0; x<width;x++) {
+    for(let y=0; y<height;y++) {
+      //the y/x times a number is how the pattern is scaled
+      let [x2,y2]=[x-a,y-b];
+      let mag1 = Math.sqrt(x*x+y*y)
+      let mag2 = Math.sqrt(x2*x2+y2*y2)
+      let dot = mag1*mag2*Math.cos(1)
+      let range = (Math.sin((dot)*500000));
       // let range = (Math.sin(y)*Math.cos(x));
       range+=1;
       range/=2;
@@ -133,31 +128,23 @@ function noiset(a,b) {
         y: y,
         color: ctx.fillStyle=`rgb(${c},${c},${c})`,
       })
-      ctx.fillRect(colorgrid[x].x,colorgrid[y].y,width,1);
     }
-    // ctx.fillStyle = colorgrid[x].color
   }
-  // console.log(colorgrid);
 }
-noiset()
-let part = new Particle(width/2,height/2,7)
-let part2 = new Particle(width/2.5,height/3,7)
-let [a,b] = [0,0];
+// console.log(colorgrid);
+
+
 
 function animate() {
   ctx.fillStyle = 'rgba(255,255,255,0.009)';
   ctx.fillRect(0,0,canvas.width,canvas.height)
-  time += 0.05;
-  let noise = genNoise(time);
-  // console.log(`time: ${time}`,`noiseX: ${noise.x}`,`noiseY: ${noise.y}` );
-  // console.log(noise.x*width);
-  part.update(noise.x,noise.y)
-  part2.update(noise.x+9,noise.y)
-  part.draw()
-  part2.draw()
   
+  noiset(10,20)
+  colorgrid.forEach(pixel => {
+    ctx.fillStyle = pixel.color;
+    ctx.fillRect(pixel.x,pixel.y,1,1)
+  })
  
-  // noiset()
   
   grid.forEach(point => {
     angleX = 0.0005;
@@ -181,10 +168,7 @@ function animate() {
   })
 
   
-  if (mx > 0 && my > 0) {
-    mx -= 0.001;
-    my -= 0.001;
-  }
+
 
   // requestAnimationFrame(animate)
 }

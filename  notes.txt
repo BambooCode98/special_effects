@@ -115,3 +115,23 @@ function draw(x,y,length,angle, branchWidth) {
   
   ctx.restore();
 }
+
+
+
+////////interesting patterns of sin and console
+
+function genNoise(t) {
+  //generates a value between 0-1 per unit of "time"
+  let noiseArray = [];
+  let rndnum;
+  for(let n=0; n<1; n+=0.001) {
+    // noiseArray.push(n%t*2);
+    // noiseArray.push({x: Math.cos(t+n), y: Math.sin(t*n)});
+    //if x or y here have cos/sin with t+n as a function then it makes the graph of sin/cos
+    noiseArray.push({x: t+n, y: t+n});
+  }
+  rndnum = noiseArray[Math.floor(Math.random()*noiseArray.length)];
+  // console.log(noiseArray);
+  return rndnum;
+}
+////////
