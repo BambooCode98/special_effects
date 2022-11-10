@@ -106,71 +106,101 @@ for(let i=0; i < width; i+=scale) {
 }
 
 
+function fade(n) {
+  return ((6*n-15)*n+10)*n*n*n
+}
 
+function lerp(l1,l2,d) {
+  return l1 + d*(l2-l1)
+}
 
+function smoothstep(d) {
+  let l1 = d * d;
+  let l2 = 1.0 - (1.0-d) * (1.0-d)
+  return lerp(l1,l2,d)
+}
 
 let colorgrid = [];
 function noiset(a,b) {
-  for(let x=0; x<width;x++) {
-    for(let y=0; y<height;y++) {
+  for(let x=0; x<width;x+=8) {
+    for(let y=0; y<height;y+=8) {
       //the y/x times a number is how the pattern is scaled
       let [x2,y2]=[x-a,y-b];
       let mag1 = Math.sqrt(x*x+y*y)
       let mag2 = Math.sqrt(x2*x2+y2*y2)
-      let dot = mag1*mag2*Math.cos(1)
-      let range = (Math.sin((dot)*500000));
+      let dot = mag1*mag2*Math.cos(mag1-mag2)
+      let ux = fade(x);
+      let uy = fade(y);
+      let f = smoothstep(dot)
+      //range is the result of the noise funtion here, so would return base value
+      //number in the sine is the frequency
+      //amplitude is in front
+      let range = (Math.sin(f*50000));
       // let range = (Math.sin(y)*Math.cos(x));
       range+=1;
       range/=2;
-      let c = Math.round(range*255);
+      let c1 = Math.round(Math.random()*range*255);
+      let c2 = Math.round(Math.random()*range*255);
+      let c3 = Math.round(Math.random()*range*255);
       colorgrid.push({
         x: x,
         y: y,
-        color: ctx.fillStyle=`rgb(${c},${c},${c})`,
+        color: `rgb(${c1},${c2},${c3})`,
+        width: 2,
       })
     }
   }
 }
-// console.log(colorgrid);
 
-
+noiset(5,5)
 
 function animate() {
   ctx.fillStyle = 'rgba(255,255,255,0.009)';
   ctx.fillRect(0,0,canvas.width,canvas.height)
   
-  noiset(10,20)
   colorgrid.forEach(pixel => {
-    ctx.fillStyle = pixel.color;
-    ctx.fillRect(pixel.x,pixel.y,1,1)
+    // ctx.fillStyle = pixel.color;
+    // ctx.fillRect(pixel.x,pixel.y,1,1)
+    // ctx.lineWidth = pixel.width;
+    ctx.strokeStyle = pixel.color;
+    ctx.beginPath()
+    ctx.moveTo(pixel.x,pixel.y);
+    pixel.x -= 0.2;
+    pixel.y += Math.sin(5);
+    ctx.lineTo(pixel.x,pixel.y)
+    ctx.stroke()
+    if(pixel.x > width) pixel.x = 0;
+    if(pixel.y > height) pixel.y = 0;
+    if(pixel.x < 0) pixel.x = width;
+    if(pixel.y < 0) pixel.y = height;
   })
  
   
-  grid.forEach(point => {
-    angleX = 0.0005;
-    angleY = 0.0005;
-    let px1 = point.x;
-    let py1 = point.y;
-    // console.log(angleX);
-    let pX = point.x + 10 * Math.cos(angleX);
-    let pY = point.y + 10 * Math.sin(angleY);
-    // console.log(px1,pX);
-    ctx.beginPath();
-    ctx.moveTo(px1,py1);
-    ctx.lineTo(pX,pY);
-    ctx.stroke();
+  // grid.forEach(point => {
+  //   angleX = 0.0005;
+  //   angleY = 0.0005;
+  //   let px1 = point.x;
+  //   let py1 = point.y;
+  //   // console.log(angleX);
+  //   let pX = point.x + 10 * Math.cos(angleX);
+  //   let pY = point.y + 10 * Math.sin(angleY);
+  //   // console.log(px1,pX);
+  //   ctx.beginPath();
+  //   ctx.moveTo(px1,py1);
+  //   ctx.lineTo(pX,pY);
+  //   ctx.stroke();
     
-    // ctx.fillRect(pX,pY,5,5)
-    ctx.beginPath()
-    ctx.arc(pX,pY,2,0,Math.PI*2)
-    ctx.fillStyle = 'red'
-    ctx.fill();
-  })
+  //   // ctx.fillRect(pX,pY,5,5)
+  //   ctx.beginPath()
+  //   ctx.arc(pX,pY,2,0,Math.PI*2)
+  //   ctx.fillStyle = 'red'
+  //   ctx.fill();
+  // })
 
   
 
 
-  // requestAnimationFrame(animate)
+  requestAnimationFrame(animate)
 }
 
 animate()
