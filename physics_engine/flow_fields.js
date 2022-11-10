@@ -158,8 +158,8 @@ function noiset(a,b) {
 noiset(5,5)
 
 function animate() {
-  // ctx.fillStyle = 'rgba(255,255,255,1)'
-  ctx.fillRect(0,0,canvas.width,canvas.height)
+  ctx.fillStyle = 'rgba(255,255,255,0.8)'
+  // ctx.fillRect(0,0,canvas.width,canvas.height)
   // console.log(mx*0.005);
   colorgrid.forEach(pixel => {
     // ctx.fillStyle = pixel.color;
@@ -174,23 +174,24 @@ function animate() {
     let vy = Math.sin(Math.random()*8)
     let max = (vx*vx)/(mx/4)
     let may = (vy*vy)/(my/8)
-    let tvx = Math.cos(Math.random()*8)
-    let tvy = Math.sin(Math.random()*8)
-    let tax = (tvx*tvx)/(tx*0.01)
-    let tay = (tvy*tvy)/(ty*0.01)
+    let tvx = Math.cos(Math.random()*10)
+    let tvy = Math.sin(Math.random()*10)
+    let tax = (pixel.x - tx)*Math.random()*0.05;
+    let tay = (pixel.y - ty)*Math.random()*0.05;
     ctx.beginPath()
     ctx.moveTo(pixel.x,pixel.y);
-    // console.log(mx,my);
-    // pixel.x += max;
-    // pixel.y += may;
+    //these are the base states
+    // pixel.x += vx+0.02;
+    // pixel.y += vy + 1;
+    //these are the mouse and touch states
     if(my && mx) {
       pixel.x += max;
       pixel.y += may;
     }
     if(tx && ty) {
 
-      pixel.x += tax;
-      pixel.y += tay;
+      pixel.x += 2 * tax + tvx*0.05; 
+      pixel.y += 2 * tay + tvy*0.05;
     }
     ctx.lineTo(pixel.x,pixel.y)
     ctx.stroke()
@@ -198,6 +199,8 @@ function animate() {
     if(pixel.y > height) pixel.y = 0;
     if(pixel.x < 0) pixel.x = width;
     if(pixel.y < 0) pixel.y = height;
+    if(pixel.x === width || pixel.x === 0) pixel.x = width * Math.random();
+    if(pixel.y === height || pixel.y === 0 || pixel.y === ty) pixel.y = height * Math.random();
     // tx = 0;
     // ty = 0;
   })
