@@ -13,9 +13,12 @@ let canvas = document.querySelector(".canvas"),
     mousePush,
     mx = 0,
     my = 0,
+    tx = 0,
+    ty = 0,
     radians = 0,
     time = 0,
     grid = [],
+    range = 0,
     total_cols = (right_x - left_x),
     total_rows = (bottom_y - top_y),
     default_angle = Math.PI;
@@ -23,14 +26,12 @@ let canvas = document.querySelector(".canvas"),
 // console.log(scale);
 
 canvas.addEventListener('mousemove', e => {
-  mousePush = new Vector(e.clientX, e.clientY)
-  mx = mousePush.magnitude()/1000;
-  my = mousePush.magnitude()/1000;
+  mx = e.clientX;
+  my = e.clientY;
 })
 canvas.addEventListener('touchmove', e => {
-  mousePush = new Vector(e.touches[0].clientX, e.touches[0].clientY)
-  mx = mousePush.magnitude()/10000;
-  my = mousePush.magnitude()/10000;
+  tx = e.touches[0].clientX
+  ty = e.touches[0].clientY;
 })
 
 
@@ -135,10 +136,11 @@ function noiset(a,b) {
       //range is the result of the noise funtion here, so would return base value
       //number in the sine is the frequency
       //amplitude is in front
-      let range = (Math.sin(f*50000));
+      range = (Math.sin(f*50000));
       // let range = (Math.sin(y)*Math.cos(x));
       range+=1;
       range/=2;
+      
       let c1 = Math.round(Math.random()*range*255);
       let c2 = Math.round(Math.random()*range*255);
       let c3 = Math.round(Math.random()*range*255);
@@ -148,6 +150,7 @@ function noiset(a,b) {
         color: `rgb(${c1},${c2},${c3})`,
         width: 2,
       })
+      // return range;
     }
   }
 }
@@ -155,7 +158,7 @@ function noiset(a,b) {
 noiset(5,5)
 
 function animate() {
-  ctx.fillStyle = 'rgba(255,255,255,0.009)';
+  // ctx.fillStyle = 'rgba(255,255,255,1)'
   ctx.fillRect(0,0,canvas.width,canvas.height)
   
   colorgrid.forEach(pixel => {
@@ -163,18 +166,35 @@ function animate() {
     // ctx.fillRect(pixel.x,pixel.y,1,1)
     // ctx.lineWidth = pixel.width;
     ctx.strokeStyle = pixel.color;
+    ctx.lineWidth = 3;
+    let tx2 = 0;
+    let ty2 = 0;
+    tx2 += Math.cos(tx)*0.5
+    ty2 += Math.sin(ty)*0.5
     ctx.beginPath()
     ctx.moveTo(pixel.x,pixel.y);
-    pixel.x -= 0.2;
-    pixel.y += Math.sin(5);
+    // console.log(mx,my);
+    pixel.x += Math.cos(Math.random()*8);
+    pixel.y += Math.sin(Math.random()*8);
+    // if(my && mx) {
+    //   pixel.x += Math.cos(mx);
+    //   pixel.y += Math.sin(my);
+    // }
+    // if(tx && ty) {
+
+    //   pixel.x += tx2;
+    //   pixel.y += ty2;
+    // }
     ctx.lineTo(pixel.x,pixel.y)
     ctx.stroke()
     if(pixel.x > width) pixel.x = 0;
     if(pixel.y > height) pixel.y = 0;
     if(pixel.x < 0) pixel.x = width;
     if(pixel.y < 0) pixel.y = height;
+    // tx = 0;
+    // ty = 0;
   })
- 
+  // console.log(range);
   
   // grid.forEach(point => {
   //   angleX = 0.0005;
