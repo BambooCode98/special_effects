@@ -160,31 +160,38 @@ noiset(5,5)
 function animate() {
   // ctx.fillStyle = 'rgba(255,255,255,1)'
   ctx.fillRect(0,0,canvas.width,canvas.height)
-  
+  // console.log(mx*0.005);
   colorgrid.forEach(pixel => {
     // ctx.fillStyle = pixel.color;
     // ctx.fillRect(pixel.x,pixel.y,1,1)
     // ctx.lineWidth = pixel.width;
     ctx.strokeStyle = pixel.color;
-    ctx.lineWidth = 3;
-    let tx2 = 0;
-    let ty2 = 0;
-    tx2 += Math.cos(tx)*0.5
-    ty2 += Math.sin(ty)*0.5
+    // ctx.shadowColor = 'red';
+    // ctx.shadowBlur = 10;
+    ctx.lineWidth = 4;
+    // ctx.lineCap = 'round'
+    let vx = Math.cos(Math.random()*8)
+    let vy = Math.sin(Math.random()*8)
+    let max = (vx*vx)/(mx/4)
+    let may = (vy*vy)/(my/8)
+    let tvx = Math.cos(Math.random()*8)
+    let tvy = Math.sin(Math.random()*8)
+    let tax = (tvx*tvx)/(tx*0.01)
+    let tay = (tvy*tvy)/(ty*0.01)
     ctx.beginPath()
     ctx.moveTo(pixel.x,pixel.y);
     // console.log(mx,my);
-    pixel.x += Math.cos(Math.random()*8);
-    pixel.y += Math.sin(Math.random()*8);
-    // if(my && mx) {
-    //   pixel.x += Math.cos(mx);
-    //   pixel.y += Math.sin(my);
-    // }
-    // if(tx && ty) {
+    // pixel.x += max;
+    // pixel.y += may;
+    if(my && mx) {
+      pixel.x += max;
+      pixel.y += may;
+    }
+    if(tx && ty) {
 
-    //   pixel.x += tx2;
-    //   pixel.y += ty2;
-    // }
+      pixel.x += tax;
+      pixel.y += tay;
+    }
     ctx.lineTo(pixel.x,pixel.y)
     ctx.stroke()
     if(pixel.x > width) pixel.x = 0;
