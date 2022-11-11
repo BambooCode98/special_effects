@@ -171,11 +171,11 @@ function animate() {
     ctx.lineWidth = 4;
     // ctx.lineCap = 'round'
     let effectRadius = 0.5;
-    let mvx = Math.cos(Math.random()*8)
-    let mvy = Math.sin(Math.random()*8)
-    let max = (mvx*mvx)/(mx/4)
-    let may = (mvy*mvy)/(my/8)
-    //changing the final velocity value will affecct how fadt/slow the partilces leave the center
+    let mvx = Math.cos(Math.random()*10) / 0.4
+    let mvy = Math.sin(Math.random()*10) / 0.4
+    let max = (pixel.x - tx)*Math.random()*0.05;
+    let may = (pixel.x - ty)*Math.random()*0.05;
+    //changing the final velocity value will affect how fast/slow the particles leave the center
     let tvx = Math.cos(Math.random()*10) / 0.4
     let tvy = Math.sin(Math.random()*10) / 0.4
     //acceleration, changing the final value will speed up/down
