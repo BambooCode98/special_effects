@@ -188,8 +188,8 @@ function animate() {
     // pixel.y += vy + 1;
     //these are the mouse and touch states
     if(my && mx) {
-      pixel.x += max;
-      pixel.y += may;
+      pixel.x += effectRadius * max + tvy*0.05;
+      pixel.y += effectRadius * may + tvx*0.05;
     }
     if(tx && ty) {
 
