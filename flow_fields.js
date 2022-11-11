@@ -173,8 +173,8 @@ function animate() {
     let effectRadius = 0.5;
     let mvx = Math.cos(Math.random()*10) / 0.4
     let mvy = Math.sin(Math.random()*10) / 0.4
-    let max = (pixel.x - tx)*Math.random()*0.05;
-    let may = (pixel.x - ty)*Math.random()*0.05;
+    let max = (pixel.x - mx)*Math.random()*0.05;
+    let may = (pixel.x - my)*Math.random()*0.05;
     //changing the final velocity value will affect how fast/slow the particles leave the center
     let tvx = Math.cos(Math.random()*10) / 0.4
     let tvy = Math.sin(Math.random()*10) / 0.4
