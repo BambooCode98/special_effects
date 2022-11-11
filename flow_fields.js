@@ -174,7 +174,7 @@ function animate() {
     let mvx = Math.cos(Math.random()*10) / 0.4
     let mvy = Math.sin(Math.random()*10) / 0.4
     let max = (pixel.x - mx)*Math.random()*0.05;
-    let may = (pixel.x - my)*Math.random()*0.05;
+    let may = (pixel.y - my)*Math.random()*0.05;
     //changing the final velocity value will affect how fast/slow the particles leave the center
     let tvx = Math.cos(Math.random()*10) / 0.4
     let tvy = Math.sin(Math.random()*10) / 0.4
@@ -188,8 +188,8 @@ function animate() {
     // pixel.y += vy + 1;
     //these are the mouse and touch states
     if(my && mx) {
-      pixel.x += effectRadius * max + tvy*0.05;
-      pixel.y += effectRadius * may + tvx*0.05;
+      pixel.x += effectRadius * max + mvx*0.05;
+      pixel.y += effectRadius * may + mvy*0.05;
     }
     if(tx && ty) {
 
